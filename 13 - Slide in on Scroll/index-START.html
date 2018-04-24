@@ -43,6 +43,7 @@
   </div>
 
   <script>
+    //make it so the function is on a timeout. doesn't run all hundred of times
     function debounce(func, wait = 20, immediate = true) {
       var timeout;
       return function() {
@@ -57,6 +58,30 @@
         if (callNow) func.apply(context, args);
       };
     }
+
+    const sliderImages = document.querySelectorAll('.slide-in');
+
+    function checkSlide(e){
+      sliderImages.forEach(sliderImage => {
+        // console.log(window.scrollY);
+        //figure out how far the page is scrolled down
+        //halfway through the image
+        const slideInAt = (window.scrollY + window.innerHeight) - sliderImage.height / 2;
+        // console.log(slideInAt);
+        // Y location of the bottom of the image
+        const imageBottom = sliderImage.offsetTop + sliderImage.height;
+        // Show if that particular sliderImage is halfShown or Not ScrolledPastYet
+        const isHalfShown = slideInAt > sliderImage.offsetTop;
+        const isNotScrolledPast = window.scrollY < imageBottom;
+        if (isHalfShown && isNotScrolledPast) {
+          sliderImage.classList.add('active');
+        }else {
+          sliderImage.classList.remove('active');
+        }
+      })
+    }
+
+    window.addEventListener('scroll',debounce(checkSlide))
 
   </script>
 
